@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, message, Popconfirm, Rate, Space, Table, Tag } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 
 
@@ -71,7 +72,18 @@ export default function Cars() {
     }, []);
 
     return (
-        <Table columns={columns} dataSource={cars} pagination={{ pageSize: 5 }} rowKey="id" />
+        <>
+         <Space>
+                <Button style={{ marginBottom: 10 }} type="primary">
+                    <Link to="create">Create New Product</Link>
+                </Button>
+                <Button style={{ marginBottom: 10 }} type="primary">
+                    <Link to="edit">Test Edit</Link>
+                </Button>
+            </Space>
+
+             <Table columns={columns} dataSource={cars} pagination={{ pageSize: 5 }} rowKey="id" />
+        </>
     );
 }
 
