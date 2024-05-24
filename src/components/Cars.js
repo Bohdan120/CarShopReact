@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, message, Popconfirm, Rate, Space, Table, Tag } from 'antd';
+import { Button, message, Popconfirm, Space, Table } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-
-
+import { Link, useNavigate } from 'react-router-dom';
+import { carsService } from '../server/cars';
 
 const confirm = (id) => {
     console.log("Deleting car: ", id);
@@ -18,20 +17,61 @@ const columns = [
     },
     {
         title: 'Image',
-        dataIndex: 'image',
-        key: 'image',
-        render: (text) => <img style={imageStyles} src={text} alt='Car Image' />
+        dataIndex: 'imageUrl',
+        key: 'imageUrl',
+        render: (text, record) => <img style={imageStyles} src={text} alt={record.name} />
     },
     {
-        title: 'Name',
+        title: 'Make',
         dataIndex: 'make',
         key: 'make'
+    },
+    {
+        title: 'Model',
+        dataIndex: 'model',
+        key: 'model'
+    },
+    {
+        title: 'Year',
+        dataIndex: 'year',
+        key: 'year'
     },
     {
         title: 'Price',
         dataIndex: 'price',
         key: 'price',
         render: (text) => <span>{text}$</span>
+    },
+    {
+        title: 'Mileage',
+        dataIndex: 'mileage',
+        key: 'mileage'
+    },
+    {
+        title: 'Engine',
+        dataIndex: 'engine',
+        key: 'engine'
+    },
+    {
+        title: 'Horsepower',
+        dataIndex: 'horsepower',
+        key: 'horsepower'
+    },
+    {
+        title: 'Category',
+        dataIndex: 'categoryName',
+        key: 'categoryName'
+    },
+    {
+        title: 'Description',
+        dataIndex: 'description',
+        key: 'description'
+    },
+    {
+        title: 'In Stock',
+        dataIndex: 'inStock',
+        key: 'inStock',
+        render: (text) => <span>{text ? 'Yes' : 'No'}</span>
     },
     {
         title: 'Action',
@@ -41,7 +81,7 @@ const columns = [
                 <a>Show</a>
                 <Popconfirm
                     title="Delete the car"
-                    description={`Are you sure to delete ${record.title}?`}
+                    description={`Are you sure to delete ${record.make} ${record.model}?`}
                     onConfirm={() => confirm(record.id)}
                     okText="Yes"
                     cancelText="No"
@@ -54,17 +94,24 @@ const columns = [
     },
 ];
 
-const api = "http://localhost:3000/cars";
-
 export default function Cars() {
-
     const [cars, setCars] = useState([]);
+    const navigate = useNavigate();
 
     const loadCars = async () => {
-        const response = await fetch(api);
-        const data = await response.json();
-
-        setCars(data);
+        try {      
+            const response = await carsService.get();
+            const items = response.data;
+            console.log(response);
+            for (const i of items) {
+                if (!i.imageUrl.includes("://"))
+                    i.imageUrl = process.env.REACT_APP_API_HOST + i.imageUrl;
+            }
+            setCars(response.data);
+        }
+        catch(error){
+            console.log(error);
+        }
     }
 
     useEffect(() => {
@@ -73,16 +120,12 @@ export default function Cars() {
 
     return (
         <>
-         <Space>
+            <Space>
                 <Button style={{ marginBottom: 10 }} type="primary">
-                    <Link to="create">Create New Product</Link>
-                </Button>
-                <Button style={{ marginBottom: 10 }} type="primary">
-                    <Link to="edit">Test Edit</Link>
-                </Button>
+                    <Link to="create">Create New Car</Link>
+                </Button>               
             </Space>
-
-             <Table columns={columns} dataSource={cars} pagination={{ pageSize: 5 }} rowKey="id" />
+            <Table columns={columns} dataSource={cars} pagination={{ pageSize: 5 }} rowKey="id" />
         </>
     );
 }
@@ -92,4 +135,4 @@ const imageStyles = {
     height: 100,
     objectFit: "cover",
     borderRadius: 6
-}
+};

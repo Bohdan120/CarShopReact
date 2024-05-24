@@ -5,16 +5,16 @@ import Home from './components/Home';
 import Cars from './components/Cars';
 import NoPage from './components/NoPage';
 import CreateForm from './components/CreateForm';
-import { ConfigProvider, theme } from 'antd';
+import { ConfigProvider} from 'antd';
 
 const App = () => {
   return (
     <ConfigProvider
       theme={{
         token: {          
-          colorPrimary: '#D1A222',
-          colorWarning: '#FF0000',
-          algorithm: theme.darkAlgorithm,
+          colorPrimary: '#F4801A',
+          borderRadius: "20px"
+        
         },
       }}
     >

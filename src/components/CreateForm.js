@@ -1,31 +1,33 @@
-import React, { useEffect } from 'react';
-import { Button, Checkbox, Form, Input, InputNumber, Select, Space, Upload } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Checkbox, Form, Input, InputNumber, Select, Space, message, Upload } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
-import { UploadOutlined } from '@ant-design/icons';
-const { Option } = Select;
+import { ArrowLeftOutlined, UploadOutlined } from '@ant-design/icons';
+import { carsService } from '../server/cars';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const categories = [
-    { value: 1, label: "Diesel" },
-    { value: 2, label: "Electricity" },
-    { value: 3, label: "Petrol" }
-]
-
-export default function CreateForm({ product }) {
-
-    useEffect(() => {
-        if (product) {
-            form.setFieldsValue(product);
-        }
-    }, []);
-
+export default function CreateForm() {
+    const [categories, setCategories] = useState([]);
     const [form] = Form.useForm();
+    const params = useParams();
+    const navigate = useNavigate();
+    const [editMode, setEditMode] = useState(false);
 
-    const onFinish = (values) => {
-        console.log(values);
+    const loadCategories = async () => {
+        const response = await carsService.getCategories();
+        const mapped = response.data.map(x => ({ value: x.id, label: x.name }));
+        setCategories(mapped);
     };
-    const onReset = () => {
-        form.resetFields();
+
+    const loadInitialProduct = async () => {
+        if (params.id) {
+            setEditMode(true);
+            const res = await carsService.getById(params.id);
+            if (res.status !== 200) return;
+            const car = res.data;
+            form.setFieldsValue(car);
+        }
     };
+
     const normFile = (e) => {
         if (Array.isArray(e)) {
             return e;
@@ -33,9 +35,46 @@ export default function CreateForm({ product }) {
         return e?.file;
     };
 
+    useEffect(() => {
+        loadCategories();
+        loadInitialProduct();
+    }, []);
+
+    const onFinish = async (values) => {
+        try {
+            console.log('Submitting values:', values);
+            let res;
+            if (editMode) {
+                values.id = params.id;
+                res = await carsService.edit(values);
+            } else {
+                res = await carsService.create(values);
+            }
+
+            if (res.status === 200) {
+                message.success(`Car ${editMode ? 'edited' : 'added'} successfully!`);
+                navigate(-1);
+            } else {
+                console.error('Error response:', res);
+                message.error('Failed to submit the form');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            message.error('Failed to submit the form');
+        }
+    };
+
+    const onReset = () => {
+        form.resetFields();
+    };
+
     return (
         <>
-            <h1>Add New Car</h1>
+            <Button type='text' onClick={() => navigate(-1)}>
+                <ArrowLeftOutlined />
+            </Button>
+
+            <h1 style={{ textAlign: "center" }}>{editMode ? 'Edit' : 'Create'} Car</h1>
             <Form
                 form={form}
                 name="control-hooks"
@@ -46,19 +85,12 @@ export default function CreateForm({ product }) {
                 }}
                 layout="vertical"
             >
-                <div style={col2}>
+                <div style={{ display: "flex", gap: 10 }}>
                     <Form.Item
                         name="make"
                         label="Make"
-                        rules={[
-                            {
-                                required: true,
-                            },
-                        ]}
-                        style={{
-                            flexGrow: 1
-                        }}
-
+                        rules={[{ required: true, message: 'Please enter the car make' }]}
+                        style={{ flexGrow: 1 }}
                     >
                         <Input placeholder="Enter car make" />
                     </Form.Item>
@@ -66,15 +98,8 @@ export default function CreateForm({ product }) {
                     <Form.Item
                         name="model"
                         label="Model"
-                        rules={[
-                            {
-                                required: true,
-                            },
-                        ]}
-                        style={{
-                            flexGrow: 1
-                        }}
-
+                        rules={[{ required: true, message: 'Please enter the car model' }]}
+                        style={{ flexGrow: 1 }}
                     >
                         <Input placeholder="Enter car model" />
                     </Form.Item>
@@ -82,93 +107,96 @@ export default function CreateForm({ product }) {
                     <Form.Item
                         name="year"
                         label="Year"
-                        rules={[
-                            {
-                                required: true,
-                            },
-                        ]}
-                        style={{
-                            flexGrow: 1
-                        }}
-
+                        rules={[{ required: true, message: 'Please enter the car year' }]}
+                        style={{ flexGrow: 1 }}
                     >
-                        <Input placeholder="Enter car year" />
+                        <InputNumber min={1886} placeholder="Enter car year" style={{ width: '100%' }} />
                     </Form.Item>
-                </div>             
-             
+                </div>
+
                 <Form.Item
                     name="price"
                     label="Price"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
+                    rules={[{ required: true, message: 'Please enter the car price' }]}
                     style={{ flexGrow: 1 }}
                 >
                     <InputNumber
-                        style={{
-                            width: '100%',
-                        }}
+                        style={{ width: '100%' }}
                         prefix="$"
                         placeholder="Enter car price"
                     />
                 </Form.Item>
 
+                <Form.Item
+                    name="mileage"
+                    label="Mileage"
+                    rules={[{ required: true, message: 'Please enter the car mileage' }]}
+                    style={{ flexGrow: 1 }}
+                >
+                    <InputNumber
+                        style={{ width: '100%' }}
+                        placeholder="Enter car mileage"
+                    />
+                </Form.Item>
+
+                <Form.Item
+                    name="engine"
+                    label="Engine"
+                    rules={[{ required: true, message: 'Please enter the car engine' }]}
+                >
+                    <Input placeholder="Enter car engine" />
+                </Form.Item>
+
+                <Form.Item
+                    name="horsepower"
+                    label="Horsepower"
+                    rules={[{ required: true, message: 'Please enter the car horsepower' }]}
+                >
+                    <InputNumber
+                        style={{ width: '100%' }}
+                        placeholder="Enter car horsepower"
+                    />
+                </Form.Item>
 
                 <Form.Item
                     name="categoryId"
                     label="Category"
-                    initialValue={1}
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
+                    rules={[{ required: true, message: 'Please select a category' }]}
                 >
-                    <Select
-                        placeholder="Select a product category"
-                        options={categories}
-                    >
-                        {/* <Option value="1">Electronics</Option>
-                        <Option value="2">Transport</Option>
-                        <Option value="3">Sport</Option>
-                        <Option value="4">other</Option> */}
-                    </Select>
+                    <Select placeholder="Select a car category" options={categories} />
                 </Form.Item>
-
+               
                 <Form.Item
-                        name="image"
-                        label="URL"
-                        rules={[
-                            {
-                                required: true,
-                            },
-                        ]}
-                        style={{
-                            flexGrow: 1
-                        }}
-
-                    >
-                        <Input placeholder="Enter image URL" />
-                    </Form.Item>
+                    name="image"
+                    label="Image"
+                    valuePropName="file"
+                    getValueFromEvent={normFile}
+                >
+                    <Upload>
+                        <Button icon={<UploadOutlined />}>Click to Choose a File</Button>
+                    </Upload>
+                </Form.Item>
 
                 <Form.Item
                     name="description"
                     label="Description"
+                    rules={[{ required: true, message: 'Please enter a description' }]}
                 >
-                    <TextArea rows={4}
-                        placeholder="Enter product description"
-                        minLength={10} maxLength={3000} showCount />
-                </Form.Item>        
+                    <TextArea rows={4} placeholder="Enter car description" minLength={10} maxLength={3000} showCount />
+                </Form.Item>
 
-                <Form.Item style={{
-                    textAlign: "center"
-                }}>
+                <Form.Item
+                    name="inStock"
+                    label="In Stock"
+                    valuePropName="checked"
+                >
+                    <Checkbox>In Stock</Checkbox>
+                </Form.Item>
 
+                <Form.Item style={{ textAlign: "center" }}>
                     <Space>
                         <Button type="primary" htmlType="submit">
-                            Create
+                            {editMode ? 'Edit' : 'Create'}
                         </Button>
                         <Button htmlType="button" onClick={onReset}>
                             Reset
@@ -178,9 +206,4 @@ export default function CreateForm({ product }) {
             </Form>
         </>
     );
-};
-
-const col2 = {
-    display: "flex",
-    gap: 10
 }
