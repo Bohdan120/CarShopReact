@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Layout as AntdLayout, Menu } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
-import { HomeOutlined, InfoCircleOutlined, CarOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import { HomeOutlined, LoginOutlined, CarOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
 const { Header: AntdHeader } = AntdLayout;
 
@@ -17,14 +17,14 @@ const menuItems = [
         icon: <CarOutlined /> 
     },
     {
-        key: "/orders",
-        label: <Link to="/orders">Orders</Link>,
-        icon: <UnorderedListOutlined />
-    },
+        key: "/cart",
+        label: <Link to="/cart">Cart</Link>,
+        icon: <ShoppingCartOutlined />
+    },    
     {
-        key: "/about",
-        label: <Link to="/about">About</Link>,
-        icon: <InfoCircleOutlined />
+        key: "/login",
+        label: <Link to="/login">Login</Link>,
+        icon: <LoginOutlined />
     }
 ]
 

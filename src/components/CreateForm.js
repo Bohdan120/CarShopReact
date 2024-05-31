@@ -5,6 +5,8 @@ import { ArrowLeftOutlined, UploadOutlined } from '@ant-design/icons';
 import { carsService } from '../server/cars';
 import { useNavigate, useParams } from 'react-router-dom';
 
+let car = null;
+
 export default function CreateForm() {
     const [categories, setCategories] = useState([]);
     const [form] = Form.useForm();
@@ -23,17 +25,12 @@ export default function CreateForm() {
             setEditMode(true);
             const res = await carsService.getById(params.id);
             if (res.status !== 200) return;
-            const car = res.data;
+            
+            car = res.data;
             form.setFieldsValue(car);
         }
     };
-
-    const normFile = (e) => {
-        if (Array.isArray(e)) {
-            return e;
-        }
-        return e?.file;
-    };
+ 
 
     useEffect(() => {
         loadCategories();
@@ -41,27 +38,29 @@ export default function CreateForm() {
     }, []);
 
     const onFinish = async (values) => {
+        console.log(values);
         try {
-            console.log('Submitting values:', values);
-            let res;
             if (editMode) {
-                values.id = params.id;
-                res = await carsService.edit(values);
-            } else {
-                res = await carsService.create(values);
+                values.id = car.id;
+                const res = await carsService.edit(values);
+    
+                if (res.status === 200) {
+                    message.success("Car edited successfully!");
+                }
             }
-
-            if (res.status === 200) {
-                message.success(`Car ${editMode ? 'edited' : 'added'} successfully!`);
-                navigate(-1);
-            } else {
-                console.error('Error response:', res);
-                message.error('Failed to submit the form');
+            else {           
+                const res = await carsService.create(values);
+    
+                if (res.status === 200) {
+                    message.success("Car created successfully!");
+                }
             }
+    
         } catch (error) {
             console.error('Error submitting form:', error);
-            message.error('Failed to submit the form');
         }
+
+        navigate(-1);
     };
 
     const onReset = () => {
@@ -167,14 +166,10 @@ export default function CreateForm() {
                 </Form.Item>
                
                 <Form.Item
-                    name="image"
-                    label="Image"
-                    valuePropName="file"
-                    getValueFromEvent={normFile}
+                    name="imageUrl"
+                    label="ImageUrl"                   
                 >
-                    <Upload>
-                        <Button icon={<UploadOutlined />}>Click to Choose a File</Button>
-                    </Upload>
+                    <Input placeholder="Enter Image URL for car" />
                 </Form.Item>
 
                 <Form.Item

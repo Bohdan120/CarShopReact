@@ -1,0 +1,126 @@
+.carousel-container {
+  max-width: 2000px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.carousel-container .ant-carousel .slick-slide {
+  text-align: center;
+}
+
+.carousel-container .ant-carousel .slick-slide img {
+  display: inline-block;
+  width: 1800px;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.carousel-slide {
+  position: relative;
+}
+
+.carousel-text {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background: rgba(255, 255, 255, 0.0);
+  padding: 20px;
+  z-index: 1;
+  text-shadow: 10px 15px 10px rgba(0, 0, 0, 0.8);
+}
+
+.carousel-slide img {
+  filter: blur(3px);
+}
+
+.section {
+  margin-top: 30px;
+  padding: 20px;
+}
+
+.section-title {
+  color: white;
+  text-align: center;
+  font-style: italic;  
+  
+}
+
+.section p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #595959;
+}
+
+.service-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.service-list li {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.service-list li::before {
+  content: '✔️';
+  margin-right: 8px;
+  color: #52c41a;
+}
+
+.customer-reviews .ant-card {
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.customer-reviews .ant-card-body {
+  padding: 20px;
+}
+
+.customer-reviews .ant-card-meta-title {
+  font-weight: bold;
+  color: #1890ff;
+}
+
+.customer-reviews .ant-card-meta-description {
+  margin-top: 10px;
+}
+
+.contact-info {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #660902;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.contact-info p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.contact-block {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+ 
+}
+
+.contact-item {
+  text-align: center;
+  margin-left: 94px;
+  margin-right: 94px;
+
+}
+
+.contact-text {
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: white;
+}

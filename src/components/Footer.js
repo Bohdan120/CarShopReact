@@ -8,6 +8,8 @@ export default function Footer() {
         <AntdFooter
             style={{
                 textAlign: 'center',
+                backgroundColor: '#001529',
+                color: 'white'
             }}
         >
             Car Shop ©{new Date().getFullYear()} Created by Bohdan

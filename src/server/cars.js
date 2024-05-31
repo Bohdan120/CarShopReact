@@ -31,14 +31,13 @@ export const carsService = {
     },
     create: function (model) {
 
-        const formData = new FormData();
+        // const formData = new FormData();        
 
-        for (const key in model) {
-            if (model[key] == null) continue;
-            formData.append(key, model[key]);
-        }
+        // for (const key in model) {
+        //     if (model[key] == null) continue;
+        //     formData.append(key, model[key]);        // }
 
-        return api.post("", formData);
+        return api.post("", model);
     },
     delete: function (id) {
 
