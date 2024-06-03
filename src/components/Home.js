@@ -1,21 +1,29 @@
 import React from 'react';
-import { Carousel, Typography, Row, Col, Card, Avatar, Divider, Rate } from 'antd';
-import { MailOutlined, PhoneOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { Carousel, Typography, Row, Col, Card, Avatar, Divider, Rate, Button } from 'antd';
+import { WalletOutlined, PhoneOutlined, EnvironmentOutlined, UsergroupDeleteOutlined, TrademarkCircleOutlined, EuroCircleOutlined, MailOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
+import CountUp from 'react-countup';
+import { useNavigate } from 'react-router-dom';
 import '../styles/home.css';
+
 
 const { Title, Paragraph } = Typography;
 const { Meta } = Card;
 
-// ServiceItem functional component
 const ServiceItem = ({ icon, title, text }) => (
   <div className="service-item">
     <div className="service-icon">{icon}</div>
-    <Title level={4} className="service-title">{title}</Title>
+    <Title level={3} className="service-title">{title}</Title>
     <Paragraph className="service-text">{text}</Paragraph>
   </div>
 );
 
 const Home = () => {
+  
+  const navigate = useNavigate(); 
+  
+  const handleBuyClick = () => {
+    navigate('/cars'); 
+  };
   return (
     <>
       <Row>
@@ -52,30 +60,31 @@ const Home = () => {
       </Row>
       <Row className="section">
         <Col span={24}>
-          <Title level={3} className="section-title">About CarShop</Title>
-          <Paragraph>
+          <Title level={1} className="section-title">About CarShop</Title>
+          <Paragraph style={{fontSize:"25px"}}>
             CarShop is your trusted partner in finding the perfect car. With a wide range of vehicles from various brands, we aim to provide you with the best options that suit your needs and budget. Our team of experts is dedicated to helping you make an informed decision and ensuring a seamless buying experience.
           </Paragraph>
-          <Paragraph>
+          <Paragraph style={{fontSize:"25px"}}>
             Established in 2020, CarShop has quickly become a leading name in the car sales industry. We pride ourselves on our customer service and the quality of our cars. Whether you are looking for a brand-new model or a pre-owned vehicle, CarHub has something for everyone.
           </Paragraph>
         </Col>
       </Row>
       <Divider />
       <Row className="section">
+        <div className='servise-continer'>
         <Col span={24}>
-          <Title level={3} className="section-title">Our Services</Title>
+          <Title level={1} className="section-title">Our Services</Title>
           <Row gutter={[16, 16]}>
             <Col span={12} md={8}>
               <ServiceItem
-                icon={<EnvironmentOutlined />}
+                icon={<EuroCircleOutlined />}
                 title="Vehicle Sales"
                 text="A wide range of new and pre-owned vehicles."
               />
             </Col>
             <Col span={12} md={8}>
               <ServiceItem
-                icon={<MailOutlined />}
+                icon={<WalletOutlined/>}
                 title="Financing Options"
                 text="Flexible financing solutions to fit your budget."
               />
@@ -89,24 +98,64 @@ const Home = () => {
             </Col>
             <Col span={12} md={8}>
               <ServiceItem
-                icon={<EnvironmentOutlined />}
+                icon={<UsergroupDeleteOutlined />}
                 title="Warranty"
                 text="Various warranty options for your peace of mind."
               />
             </Col>
             <Col span={12} md={8}>
               <ServiceItem
-                icon={<MailOutlined />}
+                icon={<TrademarkCircleOutlined />}
                 title="Trade-In"
                 text="Fair valuation for your trade-in vehicles."
               />
             </Col>
+            <Col span={12} md={8}>
+              <ServiceItem
+                icon={<SafetyCertificateOutlined />} // Нова іконка
+                title="Insurance Services"
+                text="Comprehensive insurance solutions for all vehicles."
+              />
+            </Col>
+          </Row>
+        </Col>
+        </div>
+      </Row>
+      <Row className="section statistics" style={{backgroundColor:"#393531"}}>
+        <Col span={24}>
+          <Title level={1} className="section-title" style={{color:"white"}}>Our Achievements</Title>
+          <Row gutter={[16, 16]}>
+            <Col span={12} md={6}>
+              <div className="statistic-item">
+                <Title style={{color:"white"}} level={1}><CountUp start={0} end={5000} duration={5} /></Title>
+                <Paragraph style={{color:"white", fontSize:"30px"}}>Cars Sold</Paragraph>
+              </div>
+            </Col>
+            <Col span={12} md={6}>
+              <div className="statistic-item">
+                <Title style={{color:"white"}} level={1}><CountUp start={0} end={200} duration={5} /></Title>
+                <Paragraph style={{color:"white", fontSize:"30px"}}>Models Available</Paragraph>
+              </div>
+            </Col>
+            <Col span={12} md={6}>
+              <div className="statistic-item">
+                <Title style={{color:"white"}} level={1}><CountUp start={0} end={100} duration={5} /></Title>
+                <Paragraph style={{color:"white", fontSize:"30px"}}>Cities Served</Paragraph>
+              </div>
+            </Col>
+            <Col span={12} md={6}>
+              <div className="statistic-item">
+                <Title style={{color:"white"}} level={1}><CountUp start={0} end={3000} duration={5} /></Title>
+                <Paragraph style={{color:"white", fontSize:"30px"}}>Satisfied Customers</Paragraph>
+              </div>
+            </Col>
           </Row>
         </Col>
       </Row>
+      <Divider />
       <Row className="section customer-reviews">
         <Col span={24}>
-          <Title level={3} className="section-title">Customer Reviews</Title>
+          <Title level={1} className="section-title">Customer Reviews</Title>
         </Col>
         <Col span={8}>
           <Card>
@@ -140,7 +189,6 @@ const Home = () => {
             />
           </Card>
         </Col>
-        {/* Added another review */}
         <Col span={8}>
           <Card>
             <Meta
@@ -156,6 +204,29 @@ const Home = () => {
               }
             />
           </Card>
+        </Col>
+      </Row>
+      <Divider />
+      <Row className="section video-section">
+        <Col span={24}>
+          <Row gutter={[16, 16]} align="middle">
+            <Col span={12}>
+              <div className="video-text">
+                <Title level={1}>Freedom to express yourself: the new Porsche Panamera 4</Title>
+                <Paragraph style={{fontSize:"25px"}}>
+                Powerful proportions. Powerful performance. The new Panamera 4 is a sports saloon, from its styling to its dynamics, that’s unmistakably Porsche. For those who look beyond the destination and instead to how you reach it.  
+                </Paragraph>
+                <div className='buyPorsche'>
+                <Button block type="primary" style={{height:'auto', width:"200px", fontSize:"40px"}} onClick={handleBuyClick}>Buy</Button>
+                </div>
+              </div>
+            </Col>
+            <Col span={12}>
+              <div className="video-container">
+              <iframe width="860" height="415" src="https://www.youtube.com/embed/CPmRNLYBObE?si=WkzLTGUC-AvQqUlK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+            </Col>
+          </Row>
         </Col>
       </Row>
       <Divider />
@@ -188,7 +259,6 @@ const Home = () => {
       </Row>    
       <Row>
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d41188.10454459052!2d23.982339269531217!3d49.818843489612235!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x473add7c09109a57%3A0x4223c517012378e2!2z0JvRjNCy0ZbQsiwg0JvRjNCy0ZbQstGB0YzQutCwINC-0LHQu9Cw0YHRgtGMLCA3OTAwMA!5e0!3m2!1suk!2sua!4v1714495027185!5m2!1suk!2sua" frameborder="0" style={{border:0, width:"100%", height:"300px"}} allowfullscreen></iframe>
-
       </Row>  
     </>
   );

@@ -1,31 +1,23 @@
-import React, { useContext } from 'react';
-import { Button, Checkbox, Form, Input, message } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Button, Form, Input, message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { accountsService } from '../server/accounts';
-import { tokensService } from '../server/tokens';
-import { AccountsContext } from '../contexts/account.context';
 
-export default function Login() {
+export default function Register() {
     const navigate = useNavigate();
-    const { login } = useContext(AccountsContext);
 
     const onFinish = async (values) => {
         console.log('Success:', values);
 
-        const res = await accountsService.login(values);
+        const res = await accountsService.register(values);
 
-        if (res.status !== 200) {
+        if (res.status !== 201) {
             message.error("Something went wrong!");
             return;
         }
 
-        tokensService.save(res.data);
-        login({
-            email: values.email,
-        });
-
-        message.success("You're logged in successfully!");
-        navigate(-1);
+        message.success("You've registered successfully!");
+        navigate('/login');
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -34,9 +26,9 @@ export default function Login() {
 
     return (
         <>
-            <h1 style={center}>Login Form</h1>
+            <h1 style={center}>Register Form</h1>
             <Form
-                name="basic"
+                name="register"
                 style={{
                     maxWidth: 400,
                     margin: "auto"
@@ -57,6 +49,10 @@ export default function Login() {
                             required: true,
                             message: 'Please input your email!',
                         },
+                        {
+                            type: 'email',
+                            message: 'The input is not valid E-mail!',
+                        }
                     ]}
                 >
                     <Input />
@@ -76,25 +72,34 @@ export default function Login() {
                 </Form.Item>
 
                 <Form.Item
-                    name="remember"
-                    valuePropName="checked"
-                    style={center}
+                    label="Confirm Password"
+                    name="confirm"
+                    dependencies={['password']}
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please confirm your password!',
+                        },
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                if (!value || getFieldValue('password') === value) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(new Error('The two passwords do not match!'));
+                            },
+                        }),
+                    ]}
                 >
-                    <Checkbox>Remember me</Checkbox>
+                    <Input.Password />
                 </Form.Item>
 
                 <Form.Item
                     style={center}
                 >
                     <Button type="primary" htmlType="submit">
-                        Login
+                        Register
                     </Button>
-                </Form.Item>
-
-                <Form.Item
-                    style={center}
-                >
-                    <Link to="/register">Don't have an account? Register</Link>
                 </Form.Item>
             </Form>
         </>

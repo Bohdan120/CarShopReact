@@ -3,7 +3,7 @@
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
   border-radius: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 30px;  
 }
 
 .carousel-container .ant-carousel .slick-slide {
@@ -40,7 +40,7 @@
 
 .section {
   margin-top: 30px;
-  padding: 20px;
+  padding: 20px;  
 }
 
 .section-title {
@@ -51,31 +51,18 @@
 }
 
 .section p {
-  font-size: 16px;
+  font-size: 20px;
   line-height: 1.6;
   color: #595959;
 }
 
-.service-list {
-  list-style-type: none;
-  padding: 0;
-}
-
-.service-list li {
-  margin-bottom: 10px;
-  font-size: 16px;
-}
-
-.service-list li::before {
-  content: '✔️';
-  margin-right: 8px;
-  color: #52c41a;
-}
-
 .customer-reviews .ant-card {
-  margin-bottom: 20px;
+  margin: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  height: 180px;
+  background-color:aquamarine;
+  font-size: 20px;
 }
 
 .customer-reviews .ant-card-body {
@@ -85,6 +72,7 @@
 .customer-reviews .ant-card-meta-title {
   font-weight: bold;
   color: #1890ff;
+  font-size: 30px;
 }
 
 .customer-reviews .ant-card-meta-description {
@@ -94,7 +82,7 @@
 .contact-info {
   margin-top: 30px;
   padding: 20px;
-  background-color: #660902;
+  background-color: #393531;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
@@ -123,4 +111,29 @@
   font-weight: bold;
   margin-top: 10px;
   color: white;
+}
+.statistic-item{
+  text-align: center;   
+}
+
+.buyPorsche{
+  text-align: center;
+}
+
+.service-item{
+  text-align: center;
+  font-size: 40px;
+  color:crimson;  
+  background-color: rgba(239, 163, 0, 0.177);
+  border-radius: 70px;
+}
+
+.service-text{
+  font-size: 20px;
+  padding-bottom:20px;
+}
+
+.servise-continer{
+  align-items: center;
+  
 }
